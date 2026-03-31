@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  visitAPI: 'https://ehrs-visit.herokuapp.com'
+  visitAPI: 'http://127.0.0.1:8081'
 };
 
 /*

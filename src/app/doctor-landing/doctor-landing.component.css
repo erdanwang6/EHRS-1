@@ -16,3 +16,8 @@
     align-items: center;
     flex-direction: column;
 }
+
+.receive-patient-message {
+    margin-top: 12px;
+    color: #b91c1c;
+}

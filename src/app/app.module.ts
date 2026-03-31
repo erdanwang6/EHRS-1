@@ -31,7 +31,8 @@ import { NurseLandingComponent } from './nurse-landing/nurse-landing.component';
 import { DoctorLandingComponent } from './doctor-landing/doctor-landing.component';
 import { DoctorOverwiewComponent } from './doctor-overwiew/doctor-overwiew.component';
 import { NurseOverwiewComponent } from './nurse-overwiew/nurse-overwiew.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { AuthInterceptor } from './auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -73,7 +74,11 @@ import { HttpClientModule } from '@angular/common/http';
     HttpClientModule
   ],
   providers: [
-
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })

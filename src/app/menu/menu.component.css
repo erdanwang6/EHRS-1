@@ -1,12 +1,23 @@
+.role-menu {
+    display: block;
+}
+
+.role-panel {
+    margin-bottom: 8px;
+}
+
+.role-title {
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
 .menu-buttons {
     width: 100%;
+    justify-content: flex-start;
     text-align: left;
 }
 
-mat-expansion-panel-header {
-    width: 100%;
-}
-
 .active-link {
-    color: #FFCC80;
+    color: #0d47a1;
+    font-weight: 600;
 }

@@ -16,6 +16,11 @@ export class ViewableVisitationrecordResolver implements Resolve<Patient[]|void>
   constructor(private peopleService: PeopleService){}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Patient[]|void> {
-    return this.peopleService.getPatients().pipe(catchError(async (err) => alert(err)));
+    return this.peopleService.getPatients().pipe(
+      catchError(err => {
+        alert('Could not load patients for the visitation form.');
+        return of([]);
+      })
+    );
   }
 }

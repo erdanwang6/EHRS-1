@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+import { AuthService } from '../auth.service';
 
 
 @Component({
@@ -10,7 +11,9 @@ import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 export class HomeComponent implements OnInit {
 
   constructor(
-    private route: ActivatedRoute, private router: Router
+    private route: ActivatedRoute,
+    private router: Router,
+    private authService: AuthService
   ) {}
 
   navigate(parameter){
@@ -19,6 +22,9 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (this.router.url === '/home') {
+      this.router.navigateByUrl(this.authService.getHomeRoute());
+    }
   }
 
 }

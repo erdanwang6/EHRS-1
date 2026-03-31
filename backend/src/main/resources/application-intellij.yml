@@ -1,0 +1,16 @@
+server:
+  port: ${SERVER_PORT:8081}
+
+spring:
+  datasource:
+    # This local profile assumes the default SQL Server instance is reachable over TCP/IP on port 1433.
+    # On this machine, SQL Server TCP is currently disabled, so JDBC connections will fail until TCP is enabled
+    # in SQL Server Configuration Manager and the SQL Server service is restarted.
+    url: ${SPRING_DATASOURCE_URL:jdbc:sqlserver://localhost:1433;databaseName=EHRS;encrypt=false;trustServerCertificate=true;integratedSecurity=true}
+    username:
+    password:
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+
+ehrs:
+  cors:
+    allowed-origin-patterns: http://localhost:*,http://127.0.0.1:*

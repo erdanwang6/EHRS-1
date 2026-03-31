@@ -11,3 +11,8 @@ form {
     display: flex;
     flex-direction: column;
 }
+
+.login-error {
+    color: #b00020;
+    margin: 0 0 12px;
+}

@@ -6,58 +6,128 @@
 <br/><br/>
 <div class="recordForm">
 
-    <form class="newRecord" #visitationForm="ngForm" (ngSubmit)="onSubmit()" novalidate >
+    <form class="newRecord" #visitationForm="ngForm" (ngSubmit)="onSubmit(visitationForm)" novalidate>
 
-        <mat-form-field class="patientName">
+        <mat-slide-toggle
+            name="createNewPatient"
+            [ngModel]="createNewPatient"
+            (ngModelChange)="onCreateNewPatientChanged($event)">
+            Create New Patient
+        </mat-slide-toggle>
+
+        <div class="patient-mode-label" *ngIf="!createNewPatient">Use an existing patient</div>
+        <div class="patient-mode-label" *ngIf="createNewPatient">Enter the new patient's details</div>
+
+        <mat-form-field class="patientName" *ngIf="!createNewPatient">
             <mat-label>Patient Name and date of birth</mat-label>
             <input type="text" required #patientName="ngModel"
-                [class.is-invalid]="patientName.invalid && patientName.touched"
+                [class.is-invalid]="(patientName.invalid && patientName.touched) || (!patientid && patientSearch)"
                 class="form-control"
                 placeholder="name mm/dd/yyyy"
                 aria-label="Patient Name"
                 name="patientName"
                 matInput
-                [(ngModel)]="formModel.patientID" 
+                [(ngModel)]="patientSearch"
+                (ngModelChange)="onPatientInputChanged($event)"
                 [matAutocomplete]="auto">
             <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="onPatientSelectionChanged($event)">
-              <mat-option *ngFor="let patient of filteredPatients | async" [value]="patient.namebirth" [id]="patient.patientid">
+              <mat-option *ngFor="let patient of filteredPatients" [value]="patient.namebirth">
                 {{patient.namebirth}}
               </mat-option>
             </mat-autocomplete>
-        </mat-form-field> 
+            <mat-error *ngIf="patientName.invalid && patientName.touched">Patient is required.</mat-error>
+            <mat-hint *ngIf="patientSearch && !patientid">Select a patient from the autocomplete list.</mat-hint>
+        </mat-form-field>
 
-        <mat-form-field class="visitDate" >
+        <div class="new-patient-fields" *ngIf="createNewPatient">
+            <mat-form-field class="patientName">
+                <mat-label>First Name</mat-label>
+                <input matInput
+                    required
+                    name="newPatientFirstName"
+                    #newPatientFirstName="ngModel"
+                    [(ngModel)]="newPatient.firstName">
+                <mat-error *ngIf="newPatientFirstName.invalid && newPatientFirstName.touched">First name is required.</mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="patientName">
+                <mat-label>Middle Name</mat-label>
+                <input matInput
+                    name="newPatientMiddleName"
+                    [(ngModel)]="newPatient.middleName">
+            </mat-form-field>
+
+            <mat-form-field class="patientName">
+                <mat-label>Last Name</mat-label>
+                <input matInput
+                    required
+                    name="newPatientLastName"
+                    #newPatientLastName="ngModel"
+                    [(ngModel)]="newPatient.lastName">
+                <mat-error *ngIf="newPatientLastName.invalid && newPatientLastName.touched">Last name is required.</mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="patientName">
+                <mat-label>Date of Birth</mat-label>
+                <input matInput
+                    required
+                    type="date"
+                    name="newPatientDateOfBirth"
+                    #newPatientDateOfBirth="ngModel"
+                    [(ngModel)]="newPatient.dateOfBirth">
+                <mat-error *ngIf="newPatientDateOfBirth.invalid && newPatientDateOfBirth.touched">Date of birth is required.</mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="patientName">
+                <mat-label>Sex</mat-label>
+                <mat-select
+                    name="newPatientSex"
+                    [(ngModel)]="newPatient.sex">
+                  <mat-option [value]="''">Prefer not to say</mat-option>
+                  <mat-option *ngFor="let sex of patientSexOptions" [value]="sex">{{sex}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+        <mat-form-field class="visitDate">
             <mat-label>Choose Visit Date</mat-label>
-            <input matInput [(ngModel)]="formModel.visitDate" 
-                [class.is-invlaid]="visitDate.invalid && visitDate.touched"
-                required #visitDate="ngModel"
-                type="datetime-local" 
-                name="visitDate" 
-                placeholder="start date" >
+            <input matInput [(ngModel)]="visitDate"
+                [class.is-invalid]="visitDateField.invalid && visitDateField.touched"
+                required #visitDateField="ngModel"
+                type="datetime-local"
+                name="visitDate"
+                placeholder="start date">
             <mat-hint>MM/DD/YYYY</mat-hint>
-            <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field> 
+            <mat-error *ngIf="visitDateField.invalid && visitDateField.touched">Visit date is required.</mat-error>
+        </mat-form-field>
 
         <mat-form-field class="visitReason">
             <mat-label>Visit Reason</mat-label>
-            <textarea matInput [(ngModel)]="formModel.visitReason" 
-                [class.is-invlaid]="visitReason.invalid && visitReason.touched"
-                required #visitReason="ngModel"
-                name="visitReason" 
+            <textarea matInput [(ngModel)]="visitReason"
+                [class.is-invalid]="visitReasonField.invalid && visitReasonField.touched"
+                required #visitReasonField="ngModel"
+                name="visitReason"
                 placeholder="Ex. Patient is feeling...">
             </textarea>
+            <mat-error *ngIf="visitReasonField.invalid && visitReasonField.touched">Visit reason is required.</mat-error>
         </mat-form-field>
 
         <mat-form-field class="status">
             <mat-label>Status</mat-label>
-            <mat-select [(ngModel)]="formModel.status"
-            required #status="ngModel" >
-              <mat-option *ngFor="let status of statuses" [value] = "status">{{status}}</mat-option>
+            <mat-select [(ngModel)]="selectedStatus"
+                required #statusField="ngModel"
+                name="status">
+              <mat-option *ngFor="let status of statuses" [value]="status">{{status}}</mat-option>
             </mat-select>
-          </mat-form-field>
+            <mat-error *ngIf="statusField.invalid && statusField.touched">Status is required.</mat-error>
+        </mat-form-field>
 
-        <button mat-raised-button [disabled]="visitationForm.form.invalid"
-            type="submit">Submit New Record</button>
+        <p class="submit-error" *ngIf="submitError" data-testid="visitation-submit-error">{{submitError}}</p>
+
+        <button mat-raised-button [disabled]="visitationForm.form.invalid || (!createNewPatient && !patientid) || isSubmitting"
+            type="submit">
+            {{submitButtonLabel}}
+        </button>
         <br/>
     </form>
 

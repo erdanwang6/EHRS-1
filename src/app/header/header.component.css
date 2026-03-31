@@ -17,8 +17,15 @@ mat-card {
 
 .banner-menu {
     float:right;
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
 .logo-banner-left div {
     float: left;
+}
+
+.user-banner {
+    font-weight: 600;
 }

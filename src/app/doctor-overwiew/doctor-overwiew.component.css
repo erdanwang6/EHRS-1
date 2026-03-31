@@ -4,9 +4,62 @@
     align-items: center;
     flex-direction: column;
 }
-.CheckoutBtn{
+
+.overview-message,
+.section-message {
+    margin: 0;
+}
+
+.overview-card {
+    width: min(980px, calc(100% - 48px));
+    margin: 24px auto 0;
+    padding: 24px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+}
+
+.patient-grid,
+.visit-reason-grid,
+.vitals-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px 24px;
+}
+
+.patient-grid div,
+.visit-reason-grid div,
+.vitals-grid div {
     display: flex;
-    justify-content: center;
-    align-items: center;
     flex-direction: column;
+    gap: 4px;
+}
+
+.detail-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #607d8b;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.medications-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.medications-table th,
+.medications-table td {
+    padding: 12px;
+    border-bottom: 1px solid #e5e7eb;
+    text-align: left;
+    vertical-align: top;
+}
+
+.medications-table th {
+    background: #f8fafc;
+}
+
+.empty-state {
+    color: #64748b;
 }

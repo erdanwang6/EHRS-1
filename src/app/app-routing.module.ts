@@ -26,32 +26,35 @@ import { DoctorLandingComponent } from './doctor-landing/doctor-landing.componen
 import { DoctorOverwiewComponent } from './doctor-overwiew/doctor-overwiew.component';
 import { NurseLandingComponent } from './nurse-landing/nurse-landing.component';
 import { NurseOverwiewComponent } from './nurse-overwiew/nurse-overwiew.component';
+import { AuthGuard } from './auth.guard';
+import { LoginRedirectGuard } from './login-redirect.guard';
+import { RoleGuard } from './role.guard';
 
 const routes: Routes = [
   { path: '', redirectTo:'/login', pathMatch:"full"},
-  { path: 'home', component: HomeComponent, children: [
-    { path: 'medrec-demographics', component: ViewableMedicalrecordsDemographicsComponent},
-    { path: 'medrec-vitals', component: ViewableMedicalrecordsVitalsComponent },
-    { path: 'medrec-medications', component: ViewableMedicalrecordsMedicationsComponent },
-    { path: 'medrec-labs', component: ViewableMedicalrecordsLabsComponent },
-    { path: 'medrec-diagnosis', component: ViewableMedicalrecordsDiagnosisComponent},
-    { path: 'medrec-treatment', component: ViewableMedicalrecordsTreatmentComponent },
-    { path: 'medrec-imaging', component: ViewableMedicalrecordsImagingComponent },
-    {path: 'visitation-record', component: ViewableVisitationrecordComponent, resolve: {patients: ViewableVisitationrecordResolver}},
-    {path: 'visitation-queue', component: ViewableVisitationqueueComponent},
-    {path: 'checkout-patient', component: ViewableVisitationcheckoutComponent},
-    {path: 'checkout', component: ViewablePatientcheckoutComponent},
-    {path: 'diagnosis', component: DoctorDiagnosisComponent},
-    {path: 'doctornurse-view-visitation', component: DoctorNurseViewVisitationComponent},
-    {path: 'doctornurse-view-medical', component: DoctorNurseViewMedicalComponent},
-    {path: 'order-prescription', component: DoctorOrderPrescriptionComponent},
-    {path: 'order-radiology', component: DoctorOrderRadiologyComponent},
-    {path: 'order-lab-test', component: DoctorOrderLabtestComponent},
-    {path: 'nurselanding', component: NurseLandingComponent},
-    {path: 'doctorlanding', component: DoctorLandingComponent},
-    {path: 'DoctorOverview', component: DoctorOverwiewComponent},
-    {path: 'NurseOverview', component: NurseOverwiewComponent}  ]},
-  { path: 'login', component: LoginComponent },
+  { path: 'home', component: HomeComponent, canActivate: [AuthGuard], canActivateChild: [AuthGuard], children: [
+    { path: 'medrec-demographics', component: ViewableMedicalrecordsDemographicsComponent, canActivate: [RoleGuard], data: { roles: ['DOCTOR', 'NURSE', 'ADMIN'] }},
+    { path: 'medrec-vitals', component: ViewableMedicalrecordsVitalsComponent, canActivate: [RoleGuard], data: { roles: ['DOCTOR', 'NURSE', 'ADMIN'] }},
+    { path: 'medrec-medications', component: ViewableMedicalrecordsMedicationsComponent, canActivate: [RoleGuard], data: { roles: ['DOCTOR', 'NURSE', 'ADMIN'] }},
+    { path: 'medrec-labs', component: ViewableMedicalrecordsLabsComponent, canActivate: [RoleGuard], data: { roles: ['DOCTOR', 'NURSE', 'ADMIN'] }},
+    { path: 'medrec-diagnosis', component: ViewableMedicalrecordsDiagnosisComponent, canActivate: [RoleGuard], data: { roles: ['DOCTOR', 'NURSE', 'ADMIN'] }},
+    { path: 'medrec-treatment', component: ViewableMedicalrecordsTreatmentComponent, canActivate: [RoleGuard], data: { roles: ['DOCTOR', 'NURSE', 'ADMIN'] }},
+    { path: 'medrec-imaging', component: ViewableMedicalrecordsImagingComponent, canActivate: [RoleGuard], data: { roles: ['DOCTOR', 'NURSE', 'ADMIN'] }},
+    { path: 'visitation-record', component: ViewableVisitationrecordComponent, resolve: {patients: ViewableVisitationrecordResolver}, canActivate: [RoleGuard], data: { roles: ['INTAKE', 'ADMIN'] }},
+    { path: 'visitation-queue', component: ViewableVisitationqueueComponent, canActivate: [RoleGuard], data: { roles: ['INTAKE', 'CHECKOUT', 'ADMIN'] }},
+    { path: 'checkout-patient', component: ViewableVisitationcheckoutComponent, canActivate: [RoleGuard], data: { roles: ['INTAKE', 'CHECKOUT', 'ADMIN'] }},
+    { path: 'checkout', component: ViewablePatientcheckoutComponent, canActivate: [RoleGuard], data: { roles: ['CHECKOUT', 'ADMIN'] }},
+    { path: 'diagnosis', component: DoctorDiagnosisComponent, canActivate: [RoleGuard], data: { roles: ['DOCTOR', 'ADMIN'] }},
+    { path: 'doctornurse-view-visitation', component: DoctorNurseViewVisitationComponent, canActivate: [RoleGuard], data: { roles: ['DOCTOR', 'NURSE', 'ADMIN'] }},
+    { path: 'doctornurse-view-medical', component: DoctorNurseViewMedicalComponent, canActivate: [RoleGuard], data: { roles: ['DOCTOR', 'NURSE', 'ADMIN'] }},
+    { path: 'order-prescription', component: DoctorOrderPrescriptionComponent, canActivate: [RoleGuard], data: { roles: ['DOCTOR', 'ADMIN'] }},
+    { path: 'order-radiology', component: DoctorOrderRadiologyComponent, canActivate: [RoleGuard], data: { roles: ['DOCTOR', 'ADMIN'] }},
+    { path: 'order-lab-test', component: DoctorOrderLabtestComponent, canActivate: [RoleGuard], data: { roles: ['DOCTOR', 'ADMIN'] }},
+    { path: 'nurselanding', component: NurseLandingComponent, canActivate: [RoleGuard], data: { roles: ['NURSE', 'ADMIN'] }},
+    { path: 'doctorlanding', component: DoctorLandingComponent, canActivate: [RoleGuard], data: { roles: ['DOCTOR', 'ADMIN'] }},
+    { path: 'DoctorOverview', component: DoctorOverwiewComponent, canActivate: [RoleGuard], data: { roles: ['DOCTOR', 'ADMIN'] }},
+    { path: 'NurseOverview', component: NurseOverwiewComponent, canActivate: [RoleGuard], data: { roles: ['NURSE', 'ADMIN'] }}  ]},
+  { path: 'login', component: LoginComponent, canActivate: [LoginRedirectGuard] },
   { path: '**', component: PageNotFoundComponent }  // Wildcard route for a 404 page
 ];
 

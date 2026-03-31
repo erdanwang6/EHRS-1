@@ -1,7 +1,7 @@
 <div class="pageTitle">
     <br />
     <h2>Doctor Landing Page</h2>
-    <h4>You are signed in as:[Doctor Name] </h4>
+    <h4>You are signed in as: {{displayName}}</h4>
 </div>
 
 <br />
@@ -11,4 +11,5 @@
     <button mat-raised-button type="submit" color="primary" (click)="onReceivePatientDoctor()"
     class="doctorLandingBtn" >Receive Patient</button>
     <br/>
+    <p class="receive-patient-message" *ngIf="receivePatientMessage" data-testid="doctor-receive-message">{{receivePatientMessage}}</p>
 </div>

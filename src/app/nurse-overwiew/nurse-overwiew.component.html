@@ -3,44 +3,105 @@
     <h2>Nurse Overview Page</h2>
 </div>
 
-<br />
-<br />
-<br />
-<div class="NurseOverview">
-    <button mat-raised-button type="submit" color="primary" (click)="onAddVitals()"
-    class="NurseBtn" >Add Vitals</button>
-    <br/>
-    <br/>
+<section class="patient-details-card">
+    <h3>Current Patient Details</h3>
+    <p class="patient-summary" data-testid="nurse-patient-summary">{{patientSummaryMessage}}</p>
 
-    <button mat-raised-button type="submit" color="primary" (click)="onNurseViewVisit()"
-    class="NurseBtn" >View Patient Visit Record</button>
-    <br/>
-    <br/>
+    <div *ngIf="patientDetail; else noPatientDetails" class="patient-grid">
+        <div>
+            <span class="detail-label">Full Name</span>
+            <span data-testid="nurse-patient-name">{{patientDetail.full_name}}</span>
+        </div>
+        <div>
+            <span class="detail-label">Date of Birth</span>
+            <span data-testid="nurse-patient-dob">{{patientDetail.date_of_birth}}</span>
+        </div>
+        <div>
+            <span class="detail-label">Sex</span>
+            <span>{{patientDetail.sex || 'Not provided'}}</span>
+        </div>
+        <div>
+            <span class="detail-label">Medical Record Number</span>
+            <span>{{patientDetail.medical_record_number}}</span>
+        </div>
+        <div>
+            <span class="detail-label">Patient Status</span>
+            <span>{{patientDetail.status}}</span>
+        </div>
+        <div>
+            <span class="detail-label">Current Visit Status</span>
+            <span data-testid="nurse-current-visit-status">{{currentVisitStatus}}</span>
+        </div>
+        <div>
+            <span class="detail-label">Current Visit ID</span>
+            <span data-testid="nurse-current-visit-id">{{currentVisitId}}</span>
+        </div>
+        <div *ngIf="assignedDoctorName">
+            <span class="detail-label">Assigned Doctor</span>
+            <span data-testid="nurse-assigned-doctor">{{assignedDoctorName}}</span>
+        </div>
+    </div>
+</section>
 
-    <button mat-raised-button type="submit" color="primary" (click)="onNurseViewMedical()"
-    class="NurseBtn" >View Patient Medical Record</button>
-    <br/>
-    <br/>
-    <button mat-raised-button type="submit" color="primary" (click)="onNurseDrawBlood()"
-    class="NurseBtn" >Draw Blood</button>
-    <br/>
-    <br/>
-    <button mat-raised-button type="submit" color="primary" (click)="onNurseAdminVaccine()"
-    class="NurseBtn" >Administrater Vaccine</button>
-    <br/>
-    <br/>
-    <button mat-raised-button type="submit" color="primary" (click)="onNurseTest()"
-    class="NurseBtn" >Test/Treatment</button>
-    <br/>
-    <br/>
-</div>
-<br/>
-<br/>
-<div class="CheckoutBtn">
-    <button mat-raised-button type="submit" color="primary" (click)="onCheckoutBtn()"
-    class="NurseCheckoutBtn" >Checkout</button>
-    <br/>
-    <br/>
-    <button mat-raised-button type="submit" color="primary" (click)="onCheckoutBtn()"
-    class="AssignDocBtn" >Assign Doctor</button>
-</div>
+<section class="patient-history-card">
+    <h3>Visit History</h3>
+    <p class="history-summary" data-testid="nurse-history-summary">{{historySummaryMessage}}</p>
+
+    <table *ngIf="visitHistory.length; else noVisitHistory" class="history-table">
+        <tr>
+            <th>Date</th>
+            <th>Reason</th>
+            <th>Symptoms</th>
+            <th>Summary</th>
+            <th>Status</th>
+        </tr>
+        <tr *ngFor="let visit of visitHistory" data-testid="nurse-history-row">
+            <td>{{visit.visit_date}}</td>
+            <td>{{visit.visit_reason}}</td>
+            <td>{{visit.symptoms || 'N/A'}}</td>
+            <td>{{visit.visit_summary || 'N/A'}}</td>
+            <td>{{visit.status}}</td>
+        </tr>
+    </table>
+</section>
+
+<section class="assign-doctor-card">
+    <h3>Assign Doctor</h3>
+    <p class="assign-summary" data-testid="assign-doctor-summary">
+        {{canAssignDoctor ? 'Select a doctor to move this visit into the doctor queue.' : 'Receive a patient before assigning a doctor.'}}
+    </p>
+
+    <mat-form-field class="doctor-select-field">
+        <mat-label>Doctor</mat-label>
+        <mat-select
+            [(ngModel)]="selectedDoctorEmployeeId"
+            name="assignedDoctorEmployeeId"
+            [disabled]="!canAssignDoctor || isAssigning || !doctorOptions.length"
+            data-testid="assign-doctor-select">
+            <mat-option *ngFor="let doctor of doctorOptions" [value]="doctor.employeeid">
+                {{doctor.name_birth}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <p class="assign-empty" *ngIf="canAssignDoctor && !doctorOptions.length">No active doctors are available for assignment.</p>
+    <p class="assign-success" *ngIf="assignMessage" data-testid="assign-doctor-message">{{assignMessage}}</p>
+    <p class="assign-error" *ngIf="assignError" data-testid="assign-doctor-error">{{assignError}}</p>
+
+    <button
+        mat-raised-button
+        color="primary"
+        type="button"
+        (click)="onAssignDoctor()"
+        [disabled]="!canAssignDoctor || !selectedDoctorEmployeeId || isAssigning">
+        {{isAssigning ? 'Assigning...' : 'Assign Doctor'}}
+    </button>
+</section>
+
+<ng-template #noPatientDetails>
+    <div class="patient-empty">Patient details will appear here after you receive a patient.</div>
+</ng-template>
+
+<ng-template #noVisitHistory>
+    <div class="history-empty">No visit history found for this patient.</div>
+</ng-template>

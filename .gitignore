@@ -4,6 +4,8 @@
 /dist
 /tmp
 /out-tsc
+/.angular
+/backend/target
 # Only exists if Bazel was run
 /bazel-out
 
@@ -16,6 +18,7 @@ speed-measure-plugin*.json
 
 # IDEs and editors
 /.idea
+/backend/.idea
 .project
 .classpath
 .c9/
@@ -32,9 +35,14 @@ speed-measure-plugin*.json
 .history/*
 
 # misc
+/.tools
 /.sass-cache
 /connect.lock
 /coverage
+/playwright-report
+/test-results
+/backend/build
+/backend/*.log
 /libpeerconnection.log
 npm-debug.log
 yarn-error.log

@@ -1,0 +1,72 @@
+.vitals-page {
+    width: min(980px, calc(100% - 48px));
+    margin: 24px auto;
+}
+
+.pageTitle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.patient-summary-card,
+.vitals-form {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+    padding: 24px;
+    margin-top: 24px;
+}
+
+.patient-summary-card {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px 24px;
+}
+
+.patient-summary-card div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.detail-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #607d8b;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.patient-message,
+.save-success,
+.save-error,
+.record-meta {
+    margin: 0;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px 24px;
+}
+
+.save-success {
+    margin-top: 16px;
+    color: #1b5e20;
+}
+
+.save-error {
+    margin-top: 16px;
+    color: #b00020;
+}
+
+.record-meta {
+    margin-top: 16px;
+    color: #546e7a;
+}
+
+button[mat-raised-button] {
+    margin-top: 24px;
+}

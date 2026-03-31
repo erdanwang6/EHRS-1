@@ -1,0 +1,12 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="EHRS Backend" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <envs>
+      <env name="EHRS_ALLOWED_ORIGINS" value="http://localhost:4200,http://127.0.0.1:4200" />
+    </envs>
+    <module name="EHRS-1" />
+    <option name="PROGRAM_PARAMETERS" value="--spring.profiles.active=intellij" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.ehrs.backend.EhrsBackendApplication" />
+    <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$/backend" />
+    <method v="2" />
+  </configuration>
+</component>

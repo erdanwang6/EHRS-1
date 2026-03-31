@@ -4,21 +4,86 @@
     align-items: center;
     flex-direction: column;
 }
-.CheckoutBtn{
-    display: flex;
-    justify-content: right;
-    align-items: center;
-    flex-direction: column;
+
+.patient-details-card,
+.patient-history-card,
+.assign-doctor-card {
+    width: min(960px, calc(100% - 48px));
+    margin: 24px auto 0;
+    padding: 24px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
 }
-.AssignDocBtn{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+
+.patient-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px 24px;
 }
-.NurseCheckoutBtn{
+
+.patient-grid div {
     display: flex;
-    justify-content: right;
-    align-items: center;
     flex-direction: column;
+    gap: 4px;
+}
+
+.detail-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #607d8b;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.patient-summary,
+.history-summary,
+.patient-empty,
+.history-empty {
+    margin: 0 0 16px;
+}
+
+.history-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.history-table th,
+.history-table td {
+    padding: 12px;
+    border-bottom: 1px solid #e5e7eb;
+    text-align: left;
+    vertical-align: top;
+}
+
+.history-table th {
+    background: #f8fafc;
+}
+
+.assign-doctor-card {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 48px;
+}
+
+.doctor-select-field {
+    max-width: 420px;
+    width: 100%;
+}
+
+.assign-summary,
+.assign-success,
+.assign-error,
+.assign-empty {
+    margin: 0;
+}
+
+.assign-success {
+    color: #2e7d32;
+}
+
+.assign-error,
+.assign-empty {
+    color: #b91c1c;
 }

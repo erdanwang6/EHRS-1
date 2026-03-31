@@ -9,3 +9,14 @@ export interface Visit{
     visit_summary?: string;
     created_by?: string;
 }
+
+export interface VisitResponse {
+    visit_id: string;
+    status: string;
+    message: string;
+}
+
+export interface AssignDoctorRequest {
+    visitid: string;
+    employeeid: string;
+}

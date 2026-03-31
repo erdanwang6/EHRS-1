@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ConsultationServiceService } from '../consultation-service.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { PatientWorkflowContextService } from '../patient-workflow-context.service';
 
 @Component({
 	selector: 'app-doctornurse-view-medical',
@@ -9,9 +10,16 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 	styleUrls: ['./doctornurse-view-medical.component.css']
 })
 export class DoctorNurseViewMedicalComponent implements OnInit {
-	medicalData:any;
+	medicalData:any[] = [];
+	medicalMessage = 'Loading medical record...';
 
-	constructor(private router: Router, private service: ConsultationServiceService, private fb: FormBuilder) { 
+	constructor(
+		private router: Router,
+		private route: ActivatedRoute,
+		private service: ConsultationServiceService,
+		private fb: FormBuilder,
+		private workflowContext: PatientWorkflowContextService
+	) { 
 		
 	}
 
@@ -20,14 +28,19 @@ export class DoctorNurseViewMedicalComponent implements OnInit {
 	}
 
 	getDataFromApi() {
-		//TODO replace with actual patient id
-		this.service.getMedicalRecord("37f068aa-fc08-4499-a049-babe85fe96bf").subscribe(data =>{
-			this.medicalData = data;
-			this.populateTableWithData();
-		});
-	}
+		const context = this.workflowContext.setFromQueryParams(this.route.snapshot.queryParams);
+		const patientId = context.patientid || this.workflowContext.getContext().patientid;
+		if (!patientId) {
+			this.medicalData = [];
+			this.medicalMessage = 'No medical record found for that patient.';
+			return;
+		}
 
-	populateTableWithData() {
-		//TODO this
+		this.service.getMedicalRecord(patientId).subscribe(data =>{
+			this.medicalData = Array.isArray(data) ? data : [data];
+			this.medicalMessage = this.medicalData.length
+				? `${this.medicalData.length} medical record section(s) loaded.`
+				: 'No medical record found for that patient.';
+		});
 	}
 }

@@ -1,1 +1,82 @@
-<p>viewable-medicalrecords-vitals works!</p>
+<section class="vitals-page">
+    <div class="pageTitle">
+        <h2>Patient Vitals</h2>
+        <p class="patient-message" data-testid="vitals-patient-message">{{patientMessage}}</p>
+    </div>
+
+    <div class="patient-summary-card" *ngIf="patientDetail">
+        <div>
+            <span class="detail-label">Patient</span>
+            <span data-testid="vitals-patient-name">{{patientDetail.full_name}}</span>
+        </div>
+        <div>
+            <span class="detail-label">Date of Birth</span>
+            <span>{{patientDetail.date_of_birth}}</span>
+        </div>
+        <div>
+            <span class="detail-label">Medical Record Number</span>
+            <span>{{patientDetail.medical_record_number}}</span>
+        </div>
+        <div>
+            <span class="detail-label">Current Visit Status</span>
+            <span>{{currentVisitStatus}}</span>
+        </div>
+    </div>
+
+    <form class="vitals-form" [formGroup]="vitalsForm" (ngSubmit)="saveVitals()">
+        <div class="form-grid">
+            <mat-form-field>
+                <mat-label>Systolic Blood Pressure</mat-label>
+                <input matInput type="number" formControlName="systolicBp" placeholder="120">
+                <mat-hint>mmHg</mat-hint>
+                <mat-error *ngIf="vitalsForm.controls.systolicBp.invalid && vitalsForm.controls.systolicBp.touched">Systolic blood pressure is required.</mat-error>
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>Diastolic Blood Pressure</mat-label>
+                <input matInput type="number" formControlName="diastolicBp" placeholder="80">
+                <mat-hint>mmHg</mat-hint>
+                <mat-error *ngIf="vitalsForm.controls.diastolicBp.invalid && vitalsForm.controls.diastolicBp.touched">Diastolic blood pressure is required.</mat-error>
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>Heart Rate</mat-label>
+                <input matInput type="number" formControlName="pulseBpm" placeholder="72">
+                <mat-hint>bpm</mat-hint>
+                <mat-error *ngIf="vitalsForm.controls.pulseBpm.invalid && vitalsForm.controls.pulseBpm.touched">Heart rate is required.</mat-error>
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>Temperature</mat-label>
+                <input matInput type="number" step="0.1" formControlName="temperatureC" placeholder="37.0">
+                <mat-hint>C</mat-hint>
+                <mat-error *ngIf="vitalsForm.controls.temperatureC.invalid && vitalsForm.controls.temperatureC.touched">Temperature is required.</mat-error>
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>Weight</mat-label>
+                <input matInput type="number" step="0.1" formControlName="weightKg" placeholder="77.1">
+                <mat-hint>kg</mat-hint>
+                <mat-error *ngIf="vitalsForm.controls.weightKg.invalid && vitalsForm.controls.weightKg.touched">Weight is required.</mat-error>
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>Height</mat-label>
+                <input matInput type="number" step="0.1" formControlName="heightCm" placeholder="175.0">
+                <mat-hint>cm</mat-hint>
+                <mat-error *ngIf="vitalsForm.controls.heightCm.invalid && vitalsForm.controls.heightCm.touched">Height is required.</mat-error>
+            </mat-form-field>
+        </div>
+
+        <p class="save-success" *ngIf="saveMessage" data-testid="vitals-save-message">{{saveMessage}}</p>
+        <p class="save-error" *ngIf="saveError" data-testid="vitals-save-error">{{saveError}}</p>
+
+        <div class="record-meta" *ngIf="latestVitals?.recorded_at">
+            Last saved {{latestVitals?.recorded_at}} by {{latestVitals?.recorded_by_nurse || 'Unknown'}}
+        </div>
+
+        <button mat-raised-button color="primary" type="submit" [disabled]="isSaving || vitalsForm.disabled">
+            {{isSaving ? 'Saving...' : 'Save Vitals'}}
+        </button>
+    </form>
+</section>

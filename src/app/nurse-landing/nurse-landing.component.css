@@ -16,3 +16,8 @@
     align-items: center;
     flex-direction: column;
 }
+
+.receive-message {
+    margin-top: 16px;
+    color: #b00020;
+}

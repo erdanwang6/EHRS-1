@@ -1,4 +1,24 @@
+<div class="table-message" data-testid="medical-message">{{medicalMessage}}</div>
 
-<div class="table">
-	No medical record found for that patient.
+<div class="table" *ngIf="medicalData.length; else noMedicalRecord">
+	<table>
+		<tr>
+			<th>Section</th>
+			<th>Title</th>
+			<th>Details</th>
+			<th>Recorded At</th>
+			<th>Recorded By</th>
+		</tr>
+		<tr *ngFor="let record of medicalData" data-testid="medical-row">
+			<td>{{record.section_type}}</td>
+			<td>{{record.section_title}}</td>
+			<td>{{record.section_data}}</td>
+			<td>{{record.recorded_at}}</td>
+			<td>{{record.recorded_by}}</td>
+		</tr>
+	</table>
 </div>
+
+<ng-template #noMedicalRecord>
+	<div class="table">No medical record found for that patient.</div>
+</ng-template>

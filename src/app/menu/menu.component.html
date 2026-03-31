@@ -1,53 +1,19 @@
-<!-- Each group of menu items enclosed in mat-expansion-panel -->
-<!-- Each menu item is a button below mat-panel-title -->
-<!-- For now we can just create a menu item under any group -->
-<!-- since they will eventually be classified by role -->
-<mat-accordion>
-    <mat-expansion-panel hideToggle>
+<mat-accordion class="role-menu">
+    <mat-expansion-panel *ngFor="let section of visibleSections" class="role-panel" [expanded]="visibleSections.length === 1">
         <mat-expansion-panel-header>
             <mat-panel-title>
-                <mat-toolbar-row>
-                    <span>GROUP A</span>
-                  </mat-toolbar-row>
-            </mat-panel-title>
-
-        </mat-expansion-panel-header>
-    	<button class="menu-buttons" mat-button routerLink="doctornurse-view-visitation" routerLinkActive="active-link">Visitation</button>
-		<button class="menu-buttons" mat-button routerLink="doctornurse-view-medical" routerLinkActive="active-link">Medical</button>
-
-        
-        <button class="menu-buttons" mat-button >Edit</button>
-
-    </mat-expansion-panel>
-    <mat-expansion-panel (opened)="panelOpenState = true"
-                            (closed)="panelOpenState = false">
-        <mat-expansion-panel-header>
-            <mat-panel-title>
-                <mat-toolbar-row>
-                    <span>GROUP B</span>
-                    </mat-toolbar-row>
-            </mat-panel-title>
-
-        </mat-expansion-panel-header>
-        <button class="menu-buttons" mat-button routerLink="medrec-demographics" routerLinkActive="active-link">Demographics</button>
-        <button class="menu-buttons" mat-button routerLink="medrec-vitals" routerLinkActive="active-link" >Vitals</button>
-        <button class="menu-buttons" mat-button routerLink="medrec-medications" routerLinkActive="active-link" >Medications</button>
-        <button class="menu-buttons" mat-button routerLink="medrec-labs" routerLinkActive="active-link" >Labs</button>
-        <button class="menu-buttons" mat-button routerLink="medrec-diagnosis" routerLinkActive="active-link" >Diagnosis</button>
-        <button class="menu-buttons" mat-button routerLink="medrec-treatment" routerLinkActive="active-link" >Treatment</button>
-        <button class="menu-buttons" mat-button routerLink="medrec-imaging" routerLinkActive="active-link" >Imaging</button>
-    </mat-expansion-panel>
-
-    <mat-expansion-panel>
-        <mat-expansion-panel-header>
-            <mat-panel-title>
-                <mat-toolbar-row>
-                    <span> GROUP E </span>
-                </mat-toolbar-row>
+                <span class="role-title">{{section.title}}</span>
             </mat-panel-title>
         </mat-expansion-panel-header>
-        <button class="menu-buttons" mat-button routerLink="visitation-queue" routerLinkActive="active-link"> Visitation Queue</button>
-        <button class="menu-buttons" mat-button routerLink="visitation-record" routerLinkActive="active-link">Create Visitation Record</button>
-        <button class="menu-buttons" mat-button routerLink="checkout-patient" routerLinkActive="active-link">Checkout Patient</button>
+
+        <button
+            *ngFor="let item of section.items"
+            class="menu-buttons"
+            mat-button
+            [routerLink]="item.route"
+            [queryParams]="getQueryParams(item)"
+            routerLinkActive="active-link">
+            {{item.label}}
+        </button>
     </mat-expansion-panel>
 </mat-accordion>

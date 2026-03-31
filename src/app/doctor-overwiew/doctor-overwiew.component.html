@@ -1,30 +1,127 @@
 <div class="pageTitle">
     <br />
     <h2>Doctor Overview Page</h2>
+    <p class="overview-message" data-testid="doctor-overview-message">{{overviewMessage}}</p>
 </div>
 
-<br />
-<br />
-<br />
-<div class="doctorOverview">
-    <button mat-raised-button type="submit" color="primary" (click)="onDoctorAddDiagnosis()"
-    class="doctorAddDiagnosisBtn" >Add Diagnosis</button>
-    <br/>
-    <br/>
+<section class="overview-card">
+    <h3>Received Patient Info</h3>
 
-    <button mat-raised-button type="submit" color="primary" (click)="onDoctorViewVisit()"
-    class="doctorAddDiagnosisBtn" >View Patient Visit Record</button>
-    <br/>
-    <br/>
+    <div *ngIf="patientDetail; else noPatientInfo" class="patient-grid">
+        <div>
+            <span class="detail-label">Full Name</span>
+            <span data-testid="doctor-patient-name">{{patientDetail.full_name}}</span>
+        </div>
+        <div>
+            <span class="detail-label">Date of Birth</span>
+            <span data-testid="doctor-patient-dob">{{patientDetail.date_of_birth}}</span>
+        </div>
+        <div>
+            <span class="detail-label">Sex</span>
+            <span>{{patientDetail.sex || 'Not provided'}}</span>
+        </div>
+        <div>
+            <span class="detail-label">Medical Record Number</span>
+            <span>{{patientDetail.medical_record_number}}</span>
+        </div>
+        <div>
+            <span class="detail-label">Patient Status</span>
+            <span>{{patientDetail.status}}</span>
+        </div>
+        <div>
+            <span class="detail-label">Current Visit Status</span>
+            <span data-testid="doctor-visit-status">{{currentVisitStatus}}</span>
+        </div>
+        <div>
+            <span class="detail-label">Visit Date</span>
+            <span data-testid="doctor-visit-date">{{currentVisitDate}}</span>
+        </div>
+    </div>
+</section>
 
-    <button mat-raised-button type="submit" color="primary" (click)="onDoctorViewMedical()"
-    class="doctorAddDiagnosisBtn" >View Patient Medical Record</button>
-    <br/>
-    <br/>
-</div>
-<br/>
-<br/>
-<div class="CheckoutBtn">
-    <button mat-raised-button type="submit" color="primary" (click)="onCheckoutBtn()"
-    class="doctorAddDiagnosisBtn" >Checkout</button>
-</div>
+<section class="overview-card">
+    <h3>Visit Reason</h3>
+
+    <div class="visit-reason-grid">
+        <div>
+            <span class="detail-label">Reason for Visit</span>
+            <span data-testid="doctor-visit-reason">{{currentVisitReason}}</span>
+        </div>
+        <div>
+            <span class="detail-label">Symptoms</span>
+            <span>{{currentSymptoms}}</span>
+        </div>
+        <div>
+            <span class="detail-label">Visit Summary</span>
+            <span>{{currentSummary}}</span>
+        </div>
+    </div>
+</section>
+
+<section class="overview-card">
+    <h3>Latest Vitals</h3>
+    <p class="section-message" data-testid="doctor-vitals-message">{{vitalsMessage}}</p>
+
+    <div *ngIf="hasVitals; else noVitals" class="vitals-grid">
+        <div>
+            <span class="detail-label">Blood Pressure</span>
+            <span data-testid="doctor-vitals-bp">{{latestVitals?.systolic_bp}} / {{latestVitals?.diastolic_bp}} mmHg</span>
+        </div>
+        <div>
+            <span class="detail-label">Heart Rate</span>
+            <span>{{latestVitals?.pulse_bpm}} bpm</span>
+        </div>
+        <div>
+            <span class="detail-label">Temperature</span>
+            <span>{{latestVitals?.temperature_c}} C</span>
+        </div>
+        <div>
+            <span class="detail-label">Weight</span>
+            <span>{{latestVitals?.weight_kg}} kg</span>
+        </div>
+        <div>
+            <span class="detail-label">Height</span>
+            <span>{{latestVitals?.height_cm}} cm</span>
+        </div>
+        <div>
+            <span class="detail-label">Recorded At</span>
+            <span>{{latestVitals?.recorded_at || 'Unavailable'}}</span>
+        </div>
+    </div>
+</section>
+
+<section class="overview-card">
+    <h3>Medicines</h3>
+    <p class="section-message" data-testid="doctor-medications-message">{{medicationsMessage}}</p>
+
+    <table *ngIf="medications.length; else noMedications" class="medications-table">
+        <tr>
+            <th>Medication</th>
+            <th>Dosage</th>
+            <th>Frequency</th>
+            <th>Duration</th>
+            <th>Status</th>
+            <th>Prescribed By</th>
+        </tr>
+        <tr *ngFor="let medication of medications" data-testid="doctor-medication-row">
+            <td>{{medication.medication_name}}</td>
+            <td>{{medication.dosage_instruction}}</td>
+            <td>{{medication.frequency}}</td>
+            <td>{{medication.duration}}</td>
+            <td>{{medication.medication_status}}</td>
+            <td>{{medication.prescribed_by || 'Unknown'}}</td>
+        </tr>
+    </table>
+</section>
+
+<ng-template #noPatientInfo>
+    <div class="empty-state">No patient has been received for this doctor yet.</div>
+</ng-template>
+
+<ng-template #noVitals>
+    <div class="empty-state">No vitals have been recorded for this visit yet.</div>
+</ng-template>
+
+<ng-template #noMedications>
+    <div class="empty-state">No medications have been recorded for this visit yet.</div>
+</ng-template>

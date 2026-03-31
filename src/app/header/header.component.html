@@ -10,8 +10,9 @@
     </div>
     <div class="logo-banner-right">
         <div class="banner-menu">
+            <span class="user-banner" data-testid="header-user">{{displayName}} <span *ngIf="primaryRole">({{primaryRole}})</span></span>
             <button mat-button>Setting</button>
-            <button mat-button >Logout</button> 
+            <button mat-button (click)="onLogout()">Logout</button> 
         </div>
     </div>
 </mat-card>

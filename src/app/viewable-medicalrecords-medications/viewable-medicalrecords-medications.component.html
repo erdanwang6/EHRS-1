@@ -1,1 +1,112 @@
-<p>viewable-medicalrecords-medications works!</p>
+<section class="medications-page">
+    <div class="pageTitle">
+        <h2>Patient Medications</h2>
+        <p class="patient-message" data-testid="medications-patient-message">{{patientMessage}}</p>
+    </div>
+
+    <div class="patient-summary-card" *ngIf="patientDetail">
+        <div>
+            <span class="detail-label">Patient</span>
+            <span data-testid="medications-patient-name">{{patientDetail.full_name}}</span>
+        </div>
+        <div>
+            <span class="detail-label">Date of Birth</span>
+            <span>{{patientDetail.date_of_birth}}</span>
+        </div>
+        <div>
+            <span class="detail-label">Medical Record Number</span>
+            <span>{{patientDetail.medical_record_number}}</span>
+        </div>
+        <div>
+            <span class="detail-label">Current Visit Status</span>
+            <span>{{currentVisitStatus}}</span>
+        </div>
+    </div>
+
+    <form class="medications-form" [formGroup]="medicationsForm" (ngSubmit)="saveMedication()">
+        <div class="form-grid">
+            <mat-form-field class="medication-name-field">
+                <mat-label>Medication Name</mat-label>
+                <input
+                    matInput
+                    formControlName="medicationName"
+                    placeholder="Start typing a medication name"
+                    [matAutocomplete]="medicationAuto"
+                    (input)="onMedicationNameChanged($any($event.target).value)">
+                <mat-autocomplete #medicationAuto="matAutocomplete">
+                    <mat-option *ngFor="let medication of filteredMedicationReferences" [value]="medication.medication_name">
+                        {{medication.medication_name}}
+                    </mat-option>
+                </mat-autocomplete>
+                <mat-error *ngIf="medicationsForm.controls.medicationName.invalid && medicationsForm.controls.medicationName.touched">Medication name is required.</mat-error>
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>Dosage Instruction</mat-label>
+                <input matInput formControlName="dosageInstruction" placeholder="500 mg tablet">
+                <mat-error *ngIf="medicationsForm.controls.dosageInstruction.invalid && medicationsForm.controls.dosageInstruction.touched">Dosage instruction is required.</mat-error>
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>Frequency</mat-label>
+                <input matInput formControlName="frequency" placeholder="Twice daily">
+                <mat-error *ngIf="medicationsForm.controls.frequency.invalid && medicationsForm.controls.frequency.touched">Frequency is required.</mat-error>
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>Duration</mat-label>
+                <input matInput formControlName="duration" placeholder="7 days">
+                <mat-error *ngIf="medicationsForm.controls.duration.invalid && medicationsForm.controls.duration.touched">Duration is required.</mat-error>
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>Status</mat-label>
+                <mat-select formControlName="medicationStatus">
+                    <mat-option value="ACTIVE">Active</mat-option>
+                    <mat-option value="COMPLETED">Completed</mat-option>
+                    <mat-option value="ON_HOLD">On Hold</mat-option>
+                    <mat-option value="CANCELLED">Cancelled</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+        <p class="save-success" *ngIf="saveMessage" data-testid="medications-save-message">{{saveMessage}}</p>
+        <p class="save-error" *ngIf="saveError" data-testid="medications-save-error">{{saveError}}</p>
+
+        <button mat-raised-button color="primary" type="submit" [disabled]="isSaving || medicationsForm.disabled">
+            {{isSaving ? 'Saving...' : 'Save Medication'}}
+        </button>
+    </form>
+
+    <section class="medications-list-card">
+        <h3>Saved Medication Entries</h3>
+        <p class="list-summary" data-testid="medications-list-summary">
+            {{medications.length ? (medications.length + ' medication entry(ies) found for this visit.') : 'No medication entries found for this visit.'}}
+        </p>
+
+        <table *ngIf="medications.length; else noMedications" class="medications-table">
+            <tr>
+                <th>Medication</th>
+                <th>Dosage</th>
+                <th>Frequency</th>
+                <th>Duration</th>
+                <th>Status</th>
+                <th>Prescribed At</th>
+                <th>Prescribed By</th>
+            </tr>
+            <tr *ngFor="let medication of medications" data-testid="medication-row">
+                <td>{{medication.medication_name}}</td>
+                <td>{{medication.dosage_instruction}}</td>
+                <td>{{medication.frequency}}</td>
+                <td>{{medication.duration}}</td>
+                <td>{{medication.medication_status}}</td>
+                <td>{{medication.prescribed_at}}</td>
+                <td>{{medication.prescribed_by || 'Unknown'}}</td>
+            </tr>
+        </table>
+    </section>
+</section>
+
+<ng-template #noMedications>
+    <div class="empty-state">No medication entries found for this visit.</div>
+</ng-template>
